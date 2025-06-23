@@ -1,0 +1,36 @@
+<?php
+
+use App\Events\NewOrderReceived;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Broadcast;
+use Illuminate\Support\Facades\BroadcastException;
+use Illuminate\Support\Facades\Log;
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
+|
+*/
+
+Route::get('/', function () {
+    return view('welcome');
+});
+
+
+
+
+Route::get('/test-notify', function () {
+    $msg = '🛎️ แจ้งเตือนใหม่เข้ามาแล้ว! ' . now();
+    Log::info('Broadcasting to channel: orders with message: ' . $msg);
+    broadcast(new NewOrderReceived($msg));
+    return 'Sent!';
+});
+
+Route::get('/notify', function () {
+    return view('notify');
+});
