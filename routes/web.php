@@ -25,10 +25,9 @@ Route::get('/', function () {
 
 
 Route::get('/test-notify', function () {
-    $msg = '🛎️ แจ้งเตือนใหม่เข้ามาแล้ว! ' . now();
-    Log::info('Broadcasting to channel: orders with message: ' . $msg);
-    broadcast(new NewOrderReceived($msg));
-    return 'Sent!';
+    \Log::info('🧪 เรียก /test-notify แล้ว');
+    broadcast(new NewOrderReceived('🛎️ แจ้งเตือนใหม่เข้ามาแล้ว! ' . now()));
+    return 'ส่ง event แล้ว';
 });
 
 Route::get('/notify', function () {
