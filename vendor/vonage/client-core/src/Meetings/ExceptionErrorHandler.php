@@ -6,6 +6,7 @@ namespace Vonage\Meetings;
 
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+
 use Vonage\Client\Exception\Conflict;
 use Vonage\Client\Exception\Credentials;
 use Vonage\Client\Exception\NotFound;

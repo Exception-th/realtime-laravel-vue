@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Vonage Client Library for PHP
+ *
+ * @copyright Copyright (c) 2016-2022 Vonage, Inc. (http://vonage.com)
+ * @license https://github.com/Vonage/vonage-php-sdk-core/blob/master/LICENSE.txt Apache License 2.0
+ */
+
 declare(strict_types=1);
 
 namespace Vonage\Voice\Webhook;
@@ -12,19 +19,40 @@ use function json_decode;
 
 class Input
 {
-    protected ?array $speech = null;
+    /**
+     * @var array
+     */
+    protected $speech;
 
-    protected ?array $dtmf = null;
+    /**
+     * @var array
+     */
+    protected $dtmf;
 
-    protected ?string $from = null;
+    /**
+     * @var string
+     */
+    protected $from;
 
-    protected ?string $to = null;
+    /**
+     * @var string
+     */
+    protected $to;
 
-    protected ?string $uuid = null;
+    /**
+     * @var string
+     */
+    protected $uuid;
 
-    protected ?string $conversationUuid = null;
+    /**
+     * @var string
+     */
+    protected $conversationUuid;
 
-    protected ?DateTimeImmutable $timestamp = null;
+    /**
+     * @var DateTimeImmutable
+     */
+    protected $timestamp;
 
     /**
      * @throws Exception

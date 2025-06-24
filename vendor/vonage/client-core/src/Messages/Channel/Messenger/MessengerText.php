@@ -12,7 +12,6 @@ class MessengerText extends BaseMessage
 
     protected string $subType = BaseMessage::MESSAGES_SUBTYPE_TEXT;
     protected string $channel = 'messenger';
-    protected bool $validatesE164 = false;
 
     public function __construct(
         string $to,
@@ -26,11 +25,6 @@ class MessengerText extends BaseMessage
         $this->text = $text;
         $this->category = $category;
         $this->tag = $tag;
-    }
-
-    public function validatesE164(): bool
-    {
-        return $this->validatesE164;
     }
 
     public function toArray(): array

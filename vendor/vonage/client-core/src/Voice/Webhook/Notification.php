@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Vonage Client Library for PHP
+ *
+ * @copyright Copyright (c) 2016-2022 Vonage, Inc. (http://vonage.com)
+ * @license https://github.com/Vonage/vonage-php-sdk-core/blob/master/LICENSE.txt Apache License 2.0
+ */
+
 declare(strict_types=1);
 
 namespace Vonage\Voice\Webhook;
@@ -15,11 +22,17 @@ class Notification
     /**
      * @var array<string, mixed>
      */
-    protected ?array $payload = null;
+    protected $payload;
 
-    protected ?string $conversationUuid = null;
+    /**
+     * @var string
+     */
+    protected $conversationUuid;
 
-    protected ?DateTimeImmutable $timestamp = null;
+    /**
+     * @var DateTimeImmutable
+     */
+    protected $timestamp;
 
     /**
      * @throws Exception

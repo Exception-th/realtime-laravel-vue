@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Vonage Client Library for PHP
+ *
+ * @copyright Copyright (c) 2016-2022 Vonage, Inc. (http://vonage.com)
+ * @license https://github.com/Vonage/vonage-php-sdk-core/blob/master/LICENSE.txt Apache License 2.0
+ */
+
 declare(strict_types=1);
 
 namespace Vonage\Verify;
@@ -23,24 +30,38 @@ class RequestPSD2 implements ArrayHydrateInterface
     public const WORKFLOW_SMS = 6;
     public const WORKFLOW_TTS = 7;
 
-    protected ?string $country = null;
+    /**
+     * @var string
+     */
+    protected $country;
 
-    protected ?int $codeLength = null;
+    /**
+     * @var int
+     */
+    protected $codeLength;
 
-    protected ?string $locale = null;
+    /**
+     * @var string
+     */
+    protected $locale;
 
-    protected ?int $pinExpiry = null;
+    /**
+     * @var int
+     */
+    protected $pinExpiry;
 
-    protected ?int $nextEventWait = null;
+    /**
+     * @var int
+     */
+    protected $nextEventWait;
 
-    protected ?int $workflowId = null;
+    /**
+     * @var int
+     */
+    protected $workflowId;
 
-    public function __construct(
-        protected string $number,
-        protected string $payee,
-        protected string $amount,
-        ?int $workflowId = null
-    ) {
+    public function __construct(protected string $number, protected string $payee, protected string $amount, int $workflowId = null)
+    {
         if ($workflowId) {
             $this->setWorkflowId($workflowId);
         }
@@ -51,6 +72,9 @@ class RequestPSD2 implements ArrayHydrateInterface
         return $this->country;
     }
 
+    /**
+     * @return $this
+     */
     public function setCountry(string $country): self
     {
         if (strlen($country) !== 2) {
@@ -67,6 +91,9 @@ class RequestPSD2 implements ArrayHydrateInterface
         return $this->codeLength;
     }
 
+    /**
+     * @return $this
+     */
     public function setCodeLength(int $codeLength): self
     {
         if ($codeLength !== 4 || $codeLength !== 6) {
@@ -98,6 +125,9 @@ class RequestPSD2 implements ArrayHydrateInterface
         return $this->pinExpiry;
     }
 
+    /**
+     * @return $this
+     */
     public function setPinExpiry(int $pinExpiry): self
     {
         if ($pinExpiry < 60 || $pinExpiry > 3600) {
@@ -114,6 +144,9 @@ class RequestPSD2 implements ArrayHydrateInterface
         return $this->nextEventWait;
     }
 
+    /**
+     * @return $this
+     */
     public function setNextEventWait(int $nextEventWait): self
     {
         if ($nextEventWait < 60 || $nextEventWait > 3600) {

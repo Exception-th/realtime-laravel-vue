@@ -10,5 +10,5 @@ interface HandlerInterface
     /**
      * Add authentication to a request
      */
-    public function __invoke(RequestInterface $request, CredentialsInterface $credentials): RequestInterface;
+    function __invoke(RequestInterface $request, CredentialsInterface $credentials): RequestInterface;
 }

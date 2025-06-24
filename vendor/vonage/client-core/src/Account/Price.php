@@ -1,15 +1,26 @@
 <?php
 
+/**
+ * Vonage Client Library for PHP
+ *
+ * @copyright Copyright (c) 2016-2022 Vonage, Inc. (http://vonage.com)
+ * @license https://github.com/Vonage/vonage-php-sdk-core/blob/master/LICENSE.txt Apache License 2.0
+ */
+
 declare(strict_types=1);
 
 namespace Vonage\Account;
 
+use JsonSerializable;
 use RuntimeException;
 use Vonage\Entity\EntityInterface;
 use Vonage\Entity\Hydrator\ArrayHydrateInterface;
 use Vonage\Entity\JsonResponseTrait;
+use Vonage\Entity\JsonSerializableInterface;
 use Vonage\Entity\JsonSerializableTrait;
+use Vonage\Entity\JsonUnserializableInterface;
 use Vonage\Entity\NoRequestResponseTrait;
+use Vonage\Network;
 
 use function array_key_exists;
 use function ltrim;
@@ -24,9 +35,12 @@ abstract class Price implements
     use NoRequestResponseTrait;
     use JsonResponseTrait;
 
-    protected array $data = [];
+    /**
+     * @var array<string, mixed>
+     */
+    protected $data = [];
 
-    public function getCountryCode(): mixed
+    public function getCountryCode()
     {
         return $this->data['country_code'];
     }
@@ -41,12 +55,12 @@ abstract class Price implements
         return $this->data['country_name'];
     }
 
-    public function getDialingPrefix(): mixed
+    public function getDialingPrefix()
     {
         return $this->data['dialing_prefix'];
     }
 
-    public function getDefaultPrice(): mixed
+    public function getDefaultPrice()
     {
         if (isset($this->data['default_price'])) {
             return $this->data['default_price'];
@@ -66,7 +80,7 @@ abstract class Price implements
         return $this->data['currency'];
     }
 
-    public function getNetworks(): mixed
+    public function getNetworks()
     {
         return $this->data['networks'];
     }
@@ -87,7 +101,7 @@ abstract class Price implements
         $storage = [];
 
         foreach ($data as $k => $v) {
-            $k = strtolower(ltrim((string) preg_replace('/[A-Z]([A-Z](?![a-z]))*/', '_$0', $k), '_'));
+            $k = strtolower(ltrim(preg_replace('/[A-Z]([A-Z](?![a-z]))*/', '_$0', $k), '_'));
 
             // PrefixPrice fixes
             switch ($k) {

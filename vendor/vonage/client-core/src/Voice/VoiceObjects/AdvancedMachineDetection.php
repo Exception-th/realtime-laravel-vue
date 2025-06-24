@@ -10,15 +10,10 @@ class AdvancedMachineDetection implements ArrayHydrateInterface
     public const MACHINE_BEHAVIOUR_HANGUP = 'hangup';
     public const MACHINE_MODE_DETECT = 'detect';
     public const MACHINE_MODE_DETECT_BEEP = 'detect_beep';
-    public const MACHINE_MODE_DEFAULT = 'default';
     public const BEEP_TIMEOUT_MIN = 45;
     public const BEEP_TIMEOUT_MAX = 120;
     protected array $permittedBehaviour = [self::MACHINE_BEHAVIOUR_CONTINUE, self::MACHINE_BEHAVIOUR_HANGUP];
-    protected array $permittedModes = [
-        self::MACHINE_MODE_DETECT,
-        self::MACHINE_MODE_DETECT_BEEP,
-        self::MACHINE_MODE_DEFAULT
-    ];
+    protected array $permittedModes = [self::MACHINE_MODE_DETECT, self::MACHINE_MODE_DETECT_BEEP];
 
     public function __construct(
         protected string $behaviour,
@@ -74,9 +69,7 @@ class AdvancedMachineDetection implements ArrayHydrateInterface
 
     public function fromArray(array $data): static
     {
-        if (!$this->isArrayValid($data)) {
-            throw new \InvalidArgumentException('Invalid payload');
-        };
+        $this->isArrayValid($data);
 
         $this->behaviour = $data['behaviour'];
         $this->mode = $data['mode'];
@@ -104,14 +97,8 @@ class AdvancedMachineDetection implements ArrayHydrateInterface
             return false;
         }
 
-        if (
-            $this->isValidBehaviour($data['behaviour'])
-               && $this->isValidMode($data['mode'])
-               && $this->isValidTimeout($data['beep_timeout'])
-        ) {
-            return true;
-        };
-
-        return false;
+        return $this->isValidBehaviour($data['behaviour'])
+               || $this->isValidMode($data['mode'])
+               || $this->isValidTimeout($data['beep_timeout']);
     }
 }

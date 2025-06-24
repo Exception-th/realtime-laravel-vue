@@ -7,10 +7,14 @@ trait MessengerObjectTrait
     private ?string $category;
     private ?string $tag;
 
+    /**
+     * @return string
+     */
     public function getCategory(): ?string
     {
         return $this->category;
     }
+
 
     public function requiresMessengerObject(): bool
     {
@@ -22,6 +26,9 @@ trait MessengerObjectTrait
         $this->category = $category;
     }
 
+    /**
+     * @return string
+     */
     public function getTag(): ?string
     {
         return $this->tag;

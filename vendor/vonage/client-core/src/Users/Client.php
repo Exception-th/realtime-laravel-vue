@@ -14,6 +14,7 @@ use Vonage\Entity\Hydrator\HydratorInterface;
 use Vonage\Entity\IterableAPICollection;
 use Vonage\Entity\Filter\FilterInterface;
 
+use Vonage\Users\Filter\UserFilter;
 use function is_null;
 
 class Client implements ClientAwareInterface, APIClient
@@ -29,11 +30,11 @@ class Client implements ClientAwareInterface, APIClient
         return $this->api;
     }
 
-    public function listUsers(?FilterInterface $filter = null): IterableAPICollection
+    public function listUsers(FilterInterface $filter = null): IterableAPICollection
     {
         if (is_null($filter)) {
             $filter = new EmptyFilter();
-        }
+        } 
 
         $response = $this->api->search($filter);
         $response->setHydrator($this->hydrator);
@@ -74,7 +75,7 @@ class Client implements ClientAwareInterface, APIClient
         try {
             $this->api->delete($id);
             return true;
-        } catch (ClientException) {
+        } catch (ClientException $exception) {
             return false;
         }
     }

@@ -46,7 +46,7 @@ class SubaccountFilter implements FilterInterface
         }
     }
 
-    public function getQuery(): array
+    public function getQuery()
     {
         $data = [];
 

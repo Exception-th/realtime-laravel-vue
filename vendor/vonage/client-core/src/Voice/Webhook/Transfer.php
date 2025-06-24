@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Vonage Client Library for PHP
+ *
+ * @copyright Copyright (c) 2016-2022 Vonage, Inc. (http://vonage.com)
+ * @license https://github.com/Vonage/vonage-php-sdk-core/blob/master/LICENSE.txt Apache License 2.0
+ */
+
 declare(strict_types=1);
 
 namespace Vonage\Voice\Webhook;
@@ -9,13 +16,25 @@ use Exception;
 
 class Transfer
 {
-    protected ?string $conversationUuidFrom = null;
+    /**
+     * @var string
+     */
+    protected $conversationUuidFrom;
 
-    protected ?string $conversationUuidTo = null;
+    /**
+     * @var string
+     */
+    protected $conversationUuidTo;
 
-    protected ?string $uuid = null;
+    /**
+     * @var string
+     */
+    protected $uuid;
 
-    protected ?DateTimeImmutable $timestamp = null;
+    /**
+     * @var DateTimeImmutable
+     */
+    protected $timestamp;
 
     /**
      * @throws Exception

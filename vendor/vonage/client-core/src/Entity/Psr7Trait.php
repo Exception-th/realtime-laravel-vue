@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Vonage Client Library for PHP
+ *
+ * @copyright Copyright (c) 2016-2022 Vonage, Inc. (http://vonage.com)
+ * @license https://github.com/Vonage/vonage-php-sdk-core/blob/master/LICENSE.txt Apache License 2.0
+ */
+
 declare(strict_types=1);
 
 namespace Vonage\Entity;
@@ -9,6 +16,7 @@ use Psr\Http\Message\ResponseInterface;
 use Vonage\Entity\Hydrator\ArrayHydrateInterface;
 
 use function array_merge;
+use function get_class;
 use function is_array;
 use function json_decode;
 use function method_exists;
@@ -22,17 +30,16 @@ use function trigger_error;
  */
 trait Psr7Trait
 {
-    protected ?RequestInterface $request = null;
-    protected ?ResponseInterface $response = null;
+    /**
+     * @var RequestInterface
+     */
+    protected $request;
 
     /**
-     * @deprecated See error
-     *
-     * @param ResponseInterface $response
-     *
-     * @return void
-     * @throws \Exception
+     * @var ResponseInterface
      */
+    protected $response;
+
     public function setResponse(ResponseInterface $response): void
     {
         trigger_error(
@@ -80,10 +87,6 @@ trait Psr7Trait
         }
     }
 
-    /**
-     * @deprecated See error
-     * @return RequestInterface|null
-     */
     public function getRequest(): ?RequestInterface
     {
         trigger_error(
@@ -95,10 +98,6 @@ trait Psr7Trait
         return $this->request;
     }
 
-    /**
-     * @deprecated See error
-     * @return ResponseInterface|null
-     */
     public function getResponse(): ?ResponseInterface
     {
         trigger_error(

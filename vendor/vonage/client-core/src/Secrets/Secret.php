@@ -8,9 +8,15 @@ use Vonage\Entity\Hydrator\ArrayHydrateInterface;
 
 class Secret implements ArrayHydrateInterface
 {
-    protected DateTimeImmutable $createdAt;
+    /**
+     * @var DateTimeImmutable
+     */
+    protected $createdAt;
 
-    protected string $id;
+    /**
+     * @var string
+     */
+    protected $id;
 
     public function __construct(array $data = [])
     {

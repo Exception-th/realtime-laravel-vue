@@ -11,7 +11,6 @@ class MessengerImage extends BaseMessage
 
     protected string $channel = 'messenger';
     protected string $subType = BaseMessage::MESSAGES_SUBTYPE_IMAGE;
-    protected bool $validatesE164 = false;
 
     public function __construct(
         string $to,
@@ -36,10 +35,5 @@ class MessengerImage extends BaseMessage
         }
 
         return $returnArray;
-    }
-
-    public function validatesE164(): bool
-    {
-        return $this->validatesE164;
     }
 }

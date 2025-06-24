@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Vonage Client Library for PHP
+ *
+ * @copyright Copyright (c) 2016-2022 Vonage, Inc. (http://vonage.com)
+ * @license https://github.com/Vonage/vonage-php-sdk-core/blob/master/LICENSE.txt Apache License 2.0
+ */
+
 declare(strict_types=1);
 
 namespace Vonage\Client\Callback;
@@ -19,9 +26,15 @@ class Callback implements CallbackInterface
     public const ENV_POST = 'post';
     public const ENV_GET = 'get';
 
-    protected array $expected = [];
+    /**
+     * @var array
+     */
+    protected $expected = [];
 
-    protected array $data;
+    /**
+     * @var array
+     */
+    protected $data;
 
     public function __construct(array $data)
     {
@@ -40,7 +53,10 @@ class Callback implements CallbackInterface
         return $this->data;
     }
 
-    public static function fromEnv(string $source = self::ENV_ALL): callable|Callback
+    /**
+     * @return Callback|callable
+     */
+    public static function fromEnv(string $source = self::ENV_ALL)
     {
         $data = match (strtolower($source)) {
             'post' => $_POST,

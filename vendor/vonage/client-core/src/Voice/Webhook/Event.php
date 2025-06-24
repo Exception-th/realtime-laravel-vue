@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Vonage Client Library for PHP
+ *
+ * @copyright Copyright (c) 2016-2022 Vonage, Inc. (http://vonage.com)
+ * @license https://github.com/Vonage/vonage-php-sdk-core/blob/master/LICENSE.txt Apache License 2.0
+ */
+
 declare(strict_types=1);
 
 namespace Vonage\Voice\Webhook;
@@ -26,33 +33,75 @@ class Event
     public const STATUS_TIMEOUT = 'timeout';
     public const STATUS_COMPLETED = 'completed';
 
-    protected ?string $conversationUuid = null;
+    /**
+     * @var string
+     */
+    protected $conversationUuid;
 
-    protected ?string $detail = null;
+    /**
+     * @var string
+     */
+    protected $detail;
 
-    protected ?string $direction = null;
+    /**
+     * @var string
+     */
+    protected $direction;
 
-    protected ?string $duration = null;
+    /**
+     * @var ?string
+     */
+    protected $duration;
 
-    protected ?DateTimeImmutable $endTime = null;
+    /**
+     * @var ?DateTimeImmutable
+     */
+    protected $endTime;
 
-    protected ?string $from = null;
+    /**
+     * @var string
+     */
+    protected $from;
 
-    protected ?string $network = null;
+    /**
+     * @var ?string
+     */
+    protected $network;
 
-    protected ?string $price = null;
+    /**
+     * @var ?string
+     */
+    protected $price;
 
-    protected ?string $rate = null;
+    /**
+     * @var ?string
+     */
+    protected $rate;
 
-    protected ?string $status = null;
+    /**
+     * @var string
+     */
+    protected $status;
 
-    protected ?DateTimeImmutable $startTime = null;
+    /**
+     * @var ?DateTimeImmutable
+     */
+    protected $startTime;
 
-    protected ?DateTimeImmutable $timestamp = null;
+    /**
+     * @var DateTimeImmutable
+     */
+    protected $timestamp;
 
-    protected ?string $to = null;
+    /**
+     * @var string
+     */
+    protected $to;
 
-    protected ?string $uuid = null;
+    /**
+     * @var string
+     */
+    protected $uuid;
 
     /**
      * @throws Exception
@@ -82,7 +131,7 @@ class Event
         $this->detail = $event['detail'] ?? null;
     }
 
-    public function getConversationUuid(): ?string
+    public function getConversationUuid(): string
     {
         return $this->conversationUuid;
     }

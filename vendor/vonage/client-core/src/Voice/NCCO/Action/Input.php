@@ -1,10 +1,16 @@
 <?php
 
+/**
+ * Vonage Client Library for PHP
+ *
+ * @copyright Copyright (c) 2016-2022 Vonage, Inc. (http://vonage.com)
+ * @license https://github.com/Vonage/vonage-php-sdk-core/blob/master/LICENSE.txt Apache License 2.0
+ */
+
 declare(strict_types=1);
 
 namespace Vonage\Voice\NCCO\Action;
 
-use phpDocumentor\Reflection\Types\This;
 use RuntimeException;
 use Vonage\Voice\Webhook;
 
@@ -15,41 +21,65 @@ use function is_null;
 
 class Input implements ActionInterface
 {
-    public const ASYNCHRONOUS_MODE = 'asynchronous';
-    public const SYNCHRONOUS_MODE = 'synchronous';
-
-    public array $allowedModes = [
-        self::SYNCHRONOUS_MODE,
-        self::ASYNCHRONOUS_MODE,
-    ];
-    protected ?int $dtmfTimeout = null;
-
-    protected ?int $dtmfMaxDigits = null;
-
-    protected ?bool $dtmfSubmitOnHash = null;
-
-    protected ?string $speechUUID = null;
-
-    protected ?int $speechEndOnSilence = null;
-
-    protected ?string $speechLanguage = null;
-
-    protected ?string $mode = null;
+    /**
+     * @var int
+     */
+    protected $dtmfTimeout;
 
     /**
-     * @var ?array<string>
+     * @var int
      */
-    protected ?array $speechContext = null;
+    protected $dtmfMaxDigits;
 
-    protected ?int $speechStartTimeout = null;
+    /**
+     * @var bool
+     */
+    protected $dtmfSubmitOnHash;
 
-    protected ?int $speechMaxDuration = null;
+    /**
+     * @var ?string
+     */
+    protected $speechUUID;
 
-    protected ?Webhook $eventWebhook = null;
+    /**
+     * @var int
+     */
+    protected $speechEndOnSilence;
 
-    protected bool $enableSpeech = false;
+    /**
+     * @var string
+     */
+    protected $speechLanguage;
 
-    protected bool $enableDtmf = false;
+    /**
+     * @var array<string>
+     */
+    protected $speechContext;
+
+    /**
+     * @var ?int
+     */
+    protected $speechStartTimeout;
+
+    /**
+     * @var int
+     */
+    protected $speechMaxDuration;
+
+    /**
+     * @var ?Webhook
+     */
+    protected $eventWebhook;
+
+    /**
+     * @var bool
+     */
+    protected $enableSpeech = false;
+
+    /**
+     * @var bool
+     */
+    protected $enableDtmf = false;
 
     /**
      * @param array<array, mixed> $data
@@ -61,9 +91,6 @@ class Input implements ActionInterface
         if (array_key_exists('dtmf', $data)) {
             $dtmf = $data['dtmf'];
             $action->setEnableDtmf(true);
-            if (is_object($dtmf)) {
-                $dtmf = (array)$dtmf;
-            }
 
             if (array_key_exists('timeOut', $dtmf)) {
                 $action->setDtmfTimeout((int)$dtmf['timeOut']);
@@ -80,16 +107,9 @@ class Input implements ActionInterface
             }
         }
 
-        if (array_key_exists('mode', $data)) {
-            $action->setMode($data['mode']);
-        }
-
         if (array_key_exists('speech', $data)) {
             $speech = $data['speech'];
             $action->setEnableSpeech(true);
-            if (is_object($speech)) {
-                $speech = (array)$speech;
-            }
 
             if (array_key_exists('uuid', $speech)) {
                 $action->setSpeechUUID($speech['uuid'][0]);
@@ -150,10 +170,7 @@ class Input implements ActionInterface
             'action' => 'input',
         ];
 
-        if (
-            $this->getEnableDtmf() === false && $this->getEnableSpeech() === false && $this->getMode() !==
-            self::ASYNCHRONOUS_MODE
-        ) {
+        if ($this->getEnableDtmf() === false && $this->getEnableSpeech() === false) {
             throw new RuntimeException('Input NCCO action must have either speech or DTMF enabled');
         }
 
@@ -215,10 +232,6 @@ class Input implements ActionInterface
             $data['eventMethod'] = $eventWebhook->getMethod();
         }
 
-        if ($this->getMode()) {
-            $data['mode'] = $this->getMode();
-        }
-
         return $data;
     }
 
@@ -243,6 +256,9 @@ class Input implements ActionInterface
         return $this->dtmfMaxDigits;
     }
 
+    /**
+     * @return $this
+     */
     public function setDtmfMaxDigits(int $dtmfMaxDigits): self
     {
         $this->setEnableDtmf(true);
@@ -256,6 +272,9 @@ class Input implements ActionInterface
         return $this->dtmfSubmitOnHash;
     }
 
+    /**
+     * @return $this
+     */
     public function setDtmfSubmitOnHash(bool $dtmfSubmitOnHash): self
     {
         $this->setEnableDtmf(true);
@@ -269,6 +288,9 @@ class Input implements ActionInterface
         return $this->speechUUID;
     }
 
+    /**
+     * @return $this
+     */
     public function setSpeechUUID(string $speechUUID): self
     {
         $this->setEnableSpeech(true);
@@ -282,6 +304,9 @@ class Input implements ActionInterface
         return $this->speechEndOnSilence;
     }
 
+    /**
+     * @return $this
+     */
     public function setSpeechEndOnSilence(int $speechEndOnSilence): self
     {
         $this->setEnableSpeech(true);
@@ -295,6 +320,9 @@ class Input implements ActionInterface
         return $this->speechLanguage;
     }
 
+    /**
+     * @return $this
+     */
     public function setSpeechLanguage(string $speechLanguage): self
     {
         $this->setEnableSpeech(true);
@@ -304,7 +332,7 @@ class Input implements ActionInterface
     }
 
     /**
-     * @return ?array<string>
+     * @return array<string>
      */
     public function getSpeechContext(): ?array
     {
@@ -313,6 +341,8 @@ class Input implements ActionInterface
 
     /**
      * @param array<string> $speechContext Array of words to help with speech recognition
+     *
+     * @return Input
      */
     public function setSpeechContext(array $speechContext): self
     {
@@ -327,6 +357,9 @@ class Input implements ActionInterface
         return $this->speechStartTimeout;
     }
 
+    /**
+     * @return $this
+     */
     public function setSpeechStartTimeout(int $speechStartTimeout): self
     {
         $this->setEnableSpeech(true);
@@ -368,6 +401,9 @@ class Input implements ActionInterface
         return $this->enableSpeech;
     }
 
+    /**
+     * @return $this
+     */
     public function setEnableSpeech(bool $enableSpeech): Input
     {
         $this->enableSpeech = $enableSpeech;
@@ -380,31 +416,13 @@ class Input implements ActionInterface
         return $this->enableDtmf;
     }
 
+    /**
+     * @return $this
+     */
     public function setEnableDtmf(bool $enableDtmf): Input
     {
         $this->enableDtmf = $enableDtmf;
 
-        return $this;
-    }
-
-    public function getMode(): ?string
-    {
-        return $this->mode;
-    }
-
-    public function setMode(?string $mode): self
-    {
-        if ($this->getEnableDtmf()) {
-            if ($mode == self::ASYNCHRONOUS_MODE) {
-                throw new \InvalidArgumentException('Cannot have DTMF input when using Asynchronous mode.');
-            }
-        }
-
-        if (!in_array($mode, $this->allowedModes)) {
-            throw new \InvalidArgumentException('Mode not a valid string');
-        }
-
-        $this->mode = $mode;
         return $this;
     }
 }

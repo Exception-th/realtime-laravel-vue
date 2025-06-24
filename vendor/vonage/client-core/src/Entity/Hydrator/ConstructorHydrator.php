@@ -1,20 +1,34 @@
 <?php
 
+/**
+ * Vonage Client Library for PHP
+ *
+ * @copyright Copyright (c) 2016-2022 Vonage, Inc. (http://vonage.com)
+ * @license https://github.com/Vonage/vonage-php-sdk-core/blob/master/LICENSE.txt Apache License 2.0
+ */
+
 declare(strict_types=1);
 
 namespace Vonage\Entity\Hydrator;
 
 class ConstructorHydrator implements HydratorInterface
 {
-    protected string $prototype;
+    /**
+     * Class to create
+     * @var string
+     */
+    protected $prototype;
 
-    public function hydrate(array $data): mixed
+    public function hydrate(array $data)
     {
         $className = $this->prototype;
         return new $className($data);
     }
 
-    public function hydrateObject(array $data, $object): never
+    /**
+     * @param $object
+     */
+    public function hydrateObject(array $data, $object)
     {
         throw new \RuntimeException('Constructor Hydration can not happen on an existing object');
     }

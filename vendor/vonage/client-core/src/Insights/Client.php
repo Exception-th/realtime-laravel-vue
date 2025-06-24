@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Vonage Client Library for PHP
+ *
+ * @copyright Copyright (c) 2016-2022 Vonage, Inc. (http://vonage.com)
+ * @license https://github.com/Vonage/vonage-php-sdk-core/blob/master/LICENSE.txt Apache License 2.0
+ */
+
 declare(strict_types=1);
 
 namespace Vonage\Insights;
@@ -7,21 +14,19 @@ namespace Vonage\Insights;
 use Psr\Http\Client\ClientExceptionInterface;
 use Vonage\Client\APIClient;
 use Vonage\Client\APIResource;
+use Vonage\Client\ClientAwareInterface;
+use Vonage\Client\ClientAwareTrait;
 use Vonage\Client\Exception as ClientException;
-use Vonage\Client\Exception\Exception;
-use Vonage\Client\Exception\Request;
-use Vonage\Client\Exception\Server;
 use Vonage\Entity\Filter\KeyValueFilter;
-use Vonage\Entity\IterableAPICollection;
 use Vonage\Numbers\Number;
+
+use function is_null;
 
 /**
  * Class Client
  */
 class Client implements APIClient
 {
-    protected array $chargeableCodes = [0, 43, 44, 45];
-
     public function __construct(protected ?APIResource $api = null)
     {
     }
@@ -32,88 +37,95 @@ class Client implements APIClient
     }
 
     /**
+     * @param $number
+     *
      * @throws ClientExceptionInterface
-     * @throws Exception
-     * @throws Request
-     * @throws Server
+     * @throws ClientException\Exception
+     * @throws ClientException\Request
+     * @throws ClientException\Server
      */
-    public function basic(string $number): Basic
+    public function basic($number): Basic
     {
         $insightsResults = $this->makeRequest('/ni/basic/json', $number);
 
         $basic = new Basic($insightsResults['national_format_number']);
         $basic->fromArray($insightsResults);
-
         return $basic;
     }
 
     /**
+     * @param $number
+     *
      * @throws ClientExceptionInterface
-     * @throws Exception
-     * @throws Request
-     * @throws Server
+     * @throws ClientException\Exception
+     * @throws ClientException\Request
+     * @throws ClientException\Server
      */
-    public function standardCNam(string $number): StandardCnam
+    public function standardCNam($number): StandardCnam
     {
         $insightsResults = $this->makeRequest('/ni/standard/json', $number, ['cnam' => 'true']);
         $standard = new StandardCnam($insightsResults['national_format_number']);
         $standard->fromArray($insightsResults);
-
         return $standard;
     }
 
     /**
+     * @param $number
+     *
      * @throws ClientExceptionInterface
-     * @throws Exception
-     * @throws Request
-     * @throws Server
+     * @throws ClientException\Exception
+     * @throws ClientException\Request
+     * @throws ClientException\Server
      */
-    public function advancedCnam(string $number): AdvancedCnam
+    public function advancedCnam($number): AdvancedCnam
     {
         $insightsResults = $this->makeRequest('/ni/advanced/json', $number, ['cnam' => 'true']);
         $standard = new AdvancedCnam($insightsResults['national_format_number']);
         $standard->fromArray($insightsResults);
-
         return $standard;
     }
 
     /**
+     * @param $number
+     *
      * @throws ClientExceptionInterface
      * @throws ClientException\Exception
      * @throws ClientException\Request
      * @throws ClientException\Server
      */
-    public function standard(string $number): Standard
+    public function standard($number): Standard
     {
         $insightsResults = $this->makeRequest('/ni/standard/json', $number);
         $standard = new Standard($insightsResults['national_format_number']);
         $standard->fromArray($insightsResults);
-
         return $standard;
     }
 
     /**
+     * @param $number
+     *
      * @throws ClientExceptionInterface
      * @throws ClientException\Exception
      * @throws ClientException\Request
      * @throws ClientException\Server
      */
-    public function advanced(string $number): Advanced
+    public function advanced($number): Advanced
     {
         $insightsResults = $this->makeRequest('/ni/advanced/json', $number);
         $advanced = new Advanced($insightsResults['national_format_number']);
         $advanced->fromArray($insightsResults);
-
         return $advanced;
     }
 
     /**
+     * @param $number
+     *
      * @throws ClientExceptionInterface
      * @throws ClientException\Exception
      * @throws ClientException\Request
      * @throws ClientException\Server
      */
-    public function advancedAsync(string $number, string $webhook): void
+    public function advancedAsync($number, string $webhook): void
     {
         // This method does not have a return value as it's async. If there is no exception thrown
         // We can assume that everything is fine
@@ -122,6 +134,8 @@ class Client implements APIClient
 
     /**
      * Common code for generating a request
+     *
+     * @param $number
      *
      * @throws ClientException\Exception
      * @throws ClientException\Request
@@ -132,9 +146,6 @@ class Client implements APIClient
     {
         $api = $this->getApiResource();
         $api->setBaseUri($path);
-        $collectionPrototype = new IterableAPICollection();
-        $collectionPrototype->setHasPagination(false);
-        $api->setCollectionPrototype($collectionPrototype);
 
         if ($number instanceof Number) {
             $number = $number->getMsisdn();
@@ -145,7 +156,7 @@ class Client implements APIClient
         $data = $result->getPageData();
 
         // check the status field in response (HTTP status is 200 even for errors)
-        if (! in_array((int)$data['status'], $this->chargeableCodes, true)) {
+        if ((int)$data['status'] !== 0) {
             throw $this->getNIException($data);
         }
 

@@ -9,10 +9,13 @@ interface LoggerAwareInterface
     public function getLogger(): ?LoggerInterface;
 
     /**
-     * @param int|string $level Level of message that we are logging
+     * @param string|int $level Level of message that we are logging
      * @param array<mixed> $context Additional information for context
      */
-    public function log(int|string $level, string $message, array $context = []): void;
+    public function log($level, string $message, array $context = []): void;
 
-    public function setLogger(LoggerInterface $logger): void;
+    /**
+     * @return self
+     */
+    public function setLogger(LoggerInterface $logger);
 }

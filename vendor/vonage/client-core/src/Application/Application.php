@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Vonage Client Library for PHP
+ *
+ * @copyright Copyright (c) 2016-2022 Vonage, Inc. (http://vonage.com)
+ * @license https://github.com/Vonage/vonage-php-sdk-core/blob/master/LICENSE.txt Apache License 2.0
+ */
+
 declare(strict_types=1);
 
 namespace Vonage\Application;
@@ -11,6 +18,7 @@ use Vonage\Entity\EntityInterface;
 use Vonage\Entity\Hydrator\ArrayHydrateInterface;
 use Vonage\Entity\JsonResponseTrait;
 use Vonage\Entity\JsonSerializableTrait;
+use Vonage\Entity\JsonUnserializableInterface;
 use Vonage\Entity\Psr7Trait;
 
 use function count;
@@ -22,17 +30,32 @@ class Application implements EntityInterface, JsonSerializable, ArrayHydrateInte
     use Psr7Trait;
     use JsonResponseTrait;
 
-    protected VoiceConfig $voiceConfig;
+    /**
+     * @var VoiceConfig
+     */
+    protected $voiceConfig;
 
-    protected MessagesConfig $messagesConfig;
+    /**
+     * @var MessagesConfig
+     */
+    protected $messagesConfig;
 
-    protected RtcConfig $rtcConfig;
+    /**
+     * @var RtcConfig
+     */
+    protected $rtcConfig;
 
-    protected VbcConfig $vbcConfig;
+    /**
+     * @var VbcConfig
+     */
+    protected $vbcConfig;
 
-    protected ?string $name = null;
+    protected $name;
 
-    protected array $keys = [];
+    /**
+     * @var array
+     */
+    protected $keys = [];
 
     public function __construct(protected ?string $id = null)
     {
@@ -230,7 +253,7 @@ class Application implements EntityInterface, JsonSerializable, ArrayHydrateInte
     {
         // Build up capabilities that are set
         $availableCapabilities = [
-            'voice' => [VoiceConfig::ANSWER, VoiceConfig::EVENT, VoiceConfig::FALLBACK_ANSWER_URL],
+            'voice' => [VoiceConfig::ANSWER, VoiceConfig::EVENT],
             'messages' => [MessagesConfig::INBOUND, MessagesConfig::STATUS],
             'rtc' => [RtcConfig::EVENT]
         ];

@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Vonage Client Library for PHP
+ *
+ * @copyright Copyright (c) 2016-2022 Vonage, Inc. (http://vonage.com)
+ * @license https://github.com/Vonage/vonage-php-sdk-core/blob/master/LICENSE.txt Apache License 2.0
+ */
+
 declare(strict_types=1);
 
 namespace Vonage\Voice\NCCO\Action;
@@ -21,28 +28,46 @@ class Record implements ActionInterface
     /**
      * @var string Record::FORMAT_*
      */
-    protected string $format = 'mp3';
+    protected $format = 'mp3';
 
     /**
-     * @var ?string Record::SPLIT
+     * @var string Record::SPLIT
      */
-    protected ?string $split = null;
-
-    protected ?int $channels = null;
-
-    protected ?int $endOnSilence = null;
+    protected $split;
 
     /**
-     * @var ?string '*'|'#'|1'|2'|'3'|'4'|'5'|'6'|'7'|'8'|'9'|'0'
+     * @var int
      */
-    protected ?string $endOnKey = null;
+    protected $channels;
 
-    protected ?int $timeOut = null;
+    /**
+     * @var int
+     */
+    protected $endOnSilence;
 
-    protected bool $beepStart = false;
+    /**
+     * @var string '*'|'#'|1'|2'|'3'|'4'|'5'|'6'|'7'|'8'|'9'|'0'
+     */
+    protected $endOnKey;
 
-    protected ?Webhook $eventWebhook = null;
+    /**
+     * @var int
+     */
+    protected $timeOut = 7200;
 
+    /**
+     * @var bool
+     */
+    protected $beepStart = false;
+
+    /**
+     * @var Webhook
+     */
+    protected $eventWebhook;
+
+    /**
+     * @return static
+     */
     public static function factory(array $data): self
     {
         $action = new self();
@@ -56,9 +81,7 @@ class Record implements ActionInterface
         }
 
         if (array_key_exists('channels', $data)) {
-            $action->setChannels(
-                filter_var($data['channels'], FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE)
-            );
+            $action->setChannels($data['channels']);
         }
 
         if (array_key_exists('endOnSilence', $data)) {
@@ -72,9 +95,7 @@ class Record implements ActionInterface
         }
 
         if (array_key_exists('timeOut', $data)) {
-            $action->setTimeout(
-                filter_var($data['timeOut'], FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE)
-            );
+            $action->setTimeout($data['timeOut']);
         }
 
         if (array_key_exists('beepStart', $data)) {
@@ -84,9 +105,6 @@ class Record implements ActionInterface
         }
 
         if (array_key_exists('eventUrl', $data)) {
-            if (is_array($data['eventUrl'])) {
-                $data['eventUrl'] = $data['eventUrl'][0];
-            }
             if (array_key_exists('eventMethod', $data)) {
                 $webhook = new Webhook($data['eventUrl'], $data['eventMethod']);
             } else {
@@ -115,6 +133,7 @@ class Record implements ActionInterface
         $data = [
             'action' => 'record',
             'format' => $this->getFormat(),
+            'timeOut' => (string)$this->getTimeout(),
             'beepStart' => $this->getBeepStart() ? 'true' : 'false',
         ];
 
@@ -134,10 +153,6 @@ class Record implements ActionInterface
             $data['split'] = $this->getSplit();
         }
 
-        if ($this->getTimeout()) {
-            $data['timeOut'] = (string)$this->getTimeout();
-        }
-
         if ($this->getEventWebhook()) {
             $data['eventUrl'] = [$this->getEventWebhook()->getUrl()];
             $data['eventMethod'] = $this->getEventWebhook()->getMethod();
@@ -151,6 +166,9 @@ class Record implements ActionInterface
         return $this->format;
     }
 
+    /**
+     * @return $this
+     */
     public function setFormat(string $format): self
     {
         $this->format = $format;
@@ -163,6 +181,9 @@ class Record implements ActionInterface
         return $this->split;
     }
 
+    /**
+     * @return $this
+     */
     public function setSplit(string $split): self
     {
         if ($split !== 'conversation') {
@@ -179,6 +200,9 @@ class Record implements ActionInterface
         return $this->endOnKey;
     }
 
+    /**
+     * @return $this
+     */
     public function setEndOnKey(string $endOnKey): self
     {
         $match = preg_match('/^[*#0-9]$/', $endOnKey);
@@ -197,6 +221,9 @@ class Record implements ActionInterface
         return $this->eventWebhook;
     }
 
+    /**
+     * @return $this
+     */
     public function setEventWebhook(Webhook $eventWebhook): self
     {
         $this->eventWebhook = $eventWebhook;
@@ -209,6 +236,9 @@ class Record implements ActionInterface
         return $this->endOnSilence;
     }
 
+    /**
+     * @return $this
+     */
     public function setEndOnSilence(int $endOnSilence): self
     {
         if ($endOnSilence > 10 || $endOnSilence < 3) {
@@ -220,11 +250,14 @@ class Record implements ActionInterface
         return $this;
     }
 
-    public function getTimeout(): ?int
+    public function getTimeout(): int
     {
         return $this->timeOut;
     }
 
+    /**
+     * @return $this
+     */
     public function setTimeout(int $timeOut): self
     {
         if ($timeOut > 7200 || $timeOut < 3) {
@@ -241,6 +274,9 @@ class Record implements ActionInterface
         return $this->beepStart;
     }
 
+    /**
+     * @return $this
+     */
     public function setBeepStart(bool $beepStart): self
     {
         $this->beepStart = $beepStart;
@@ -253,6 +289,9 @@ class Record implements ActionInterface
         return $this->channels;
     }
 
+    /**
+     * @return $this
+     */
     public function setChannels(int $channels): self
     {
         if ($channels > 32) {
